@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>7th Pay Commission Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 500px;
+      margin: auto;
+      background-color: #f0f8ff;
+    }
+    h2 {
+      text-align: center;
+      color: #2a5d84;
+    }
+    label, select, input, button {
+      display: block;
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      font-size: 16px;
+    }
+    button {
+      background-color: #2a5d84;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #1c3f5d;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      background-color: #e6f2ff;
+      padding: 15px;
+      border-radius: 5px;
+      border: 1px solid #a3c4dc;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>7th Pay Commission Calculator</h2>
+
+  <label for="oldPay">Old Basic Pay (6th CPC):</label>
+  <input type="number" id="oldPay" placeholder="e.g. 15000">
+
+  <label for="payLevel">Select Pay Level:</label>
+  <select id="payLevel">
+    <option value="1">Level 1</option>
+    <option value="2">Level 2</option>
+    <option value="3">Level 3</option>
+    <option value="4">Level 4</option>
+    <option value="5">Level 5</option>
+    <!-- You can add more levels as needed -->
+  </select>
+
+  <button onclick="calculatePay()">Calculate</button>
+
+  <div id="result"></div>
+
+  <script>
+    const payMatrix = {
+      1: [18000, 18500, 19100, 19700, 20300, 20900, 21500, 22100, 22800],
+      2: [19900, 20500, 21100, 21700, 22400, 23100, 23800],
+      3: [21700, 22400, 23100, 23800, 24500, 25200, 26000],
+      4: [25500, 26300, 27100, 27900, 28700, 29600],
+      5: [29200, 30100, 31000, 31900, 32900, 33900],
+      // Add more if needed
+    };
+
+    function calculatePay() {
+      let oldPay = parseFloat(document.getElementById("oldPay").value);
+      let level = parseInt(document.getElementById("payLevel").value);
+      let resultBox = document.getElementById("result");
+
+      if (isNaN(oldPay) || !payMatrix[level]) {
+        resultBox.innerHTML = "❗ Please enter a valid basic pay and pay level.";
+        return;
+      }
+
+      let multiplied = oldPay * 2.57;
+      let levelPay = payMatrix[level];
+      let finalPay = levelPay.find(p => p >= multiplied);
+
+      if (!finalPay) {
+        resultBox.innerHTML = `Calculated Pay: ₹${multiplied.toFixed(2)}<br>
+        ⚠️ Not matched in current matrix for Level ${level}.`;
+      } else {
+        resultBox.innerHTML = `
+          Old Pay: ₹${oldPay}<br>
+          Calculated (×2.57): ₹${multiplied.toFixed(2)}<br>
+          <strong>New Pay (Matrix Level ${level}): ₹${finalPay}</strong>
+        `;
+      }
+    }
+  </script>
+
+</body>
+</html>
